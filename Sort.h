@@ -3,7 +3,48 @@
 class Sort
 {
 private:
-
+    template <typename T, typename F>
+    static void merge(std::vector<T>&vector, int left, int middle, int right, F func) {
+        std::vector<T> leftVector = std::vector<T>();
+        std::vector<T> rightVector = std::vector<T>();
+        int k = left;
+        for (int i = left; i <= middle; i++)
+        {
+            leftVector.push_back(vector[i]);
+            std::cout<<vector[i]<<" ";
+        }
+        for (int i = middle+1; i <= right; i++)
+        {
+            rightVector.push_back(vector[i]);
+            std::cout<<vector[i]<<" ";
+        }
+        int i = 0;
+        int j = 0;
+        while (i<leftVector.size() && j<rightVector.size())
+        {
+            if (func(rightVector[j], leftVector[i]))
+            {
+                vector[k] = leftVector[i];
+                i++;
+            } else {
+                vector[k] = rightVector[j];
+                j++;
+            }
+            k++;
+        }
+        while (i<leftVector.size())
+        {
+            vector[k] = leftVector[i];
+            i++;
+            k++;
+        }
+        while (j<rightVector.size())
+        {
+            vector[k] = rightVector[j];
+            j++;
+            k++;
+        } 
+    }
 public:
     /**
      * 
@@ -20,8 +61,7 @@ public:
                     aux = vector[i];
                     vector[i] = vector[j];
                     vector[j] = aux;
-                }
-                
+                } 
             }            
         }        
     }
@@ -64,7 +104,14 @@ public:
         }
     }
     template<typename T, typename F = std::function<bool(const T&, const T&)>>
-    static void mergeSort(std::vector<T>&vector, F func = [] (const T&a, const T&b) { return a>b; }) {
-        
+    static void mergeSort(std::vector<T>&vector, int left = 0, int right = -1, F func = [] (const T&a, const T&b) { return a>b; }) {
+        right = right==-1?vector.size()-1:right;
+        if (left<right)
+        {
+            const int middle = (left+right)/2;
+            mergeSort(vector, left, middle, func);
+            mergeSort(vector, middle+1, right, func);   
+            merge(vector, left, middle, right, func);
+        }
     }
 };
