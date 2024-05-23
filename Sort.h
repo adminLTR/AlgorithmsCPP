@@ -3,7 +3,7 @@
 class Sort
 {
 private:
-    
+
 public:
     /**
      * 
@@ -47,5 +47,24 @@ public:
             vector[smallest] = vector[i];
             vector[i] = aux;
         }        
+    }
+    template<typename T, typename F = std::function<bool(const T&, const T&)>>
+    static void insertionSort(std::vector<T>&vector, F func = [](const T& a, const T& b) { return a>b; }) {
+        T key;
+        int j;
+        for (int i = 1; i < vector.size(); i++)
+        {
+            j = i - 1;
+            key = vector[i];
+            while (j>=0 && vector[j]>key) {
+                vector[j+1] = vector[j];
+                j--;
+            }
+            vector[j+1] = key;
+        }
+    }
+    template<typename T, typename F = std::function<bool(const T&, const T&)>>
+    static void mergeSort(std::vector<T>&vector, F func = [] (const T&a, const T&b) { return a>b; }) {
+        
     }
 };
