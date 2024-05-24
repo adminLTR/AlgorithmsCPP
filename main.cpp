@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include "Sort.h"
+#include "Search.h"
 
 int main(int argc, char const *argv[])
 {
@@ -11,6 +12,10 @@ int main(int argc, char const *argv[])
     {
         std::cout<<i<<" ";
     }
+    std::cout<<std::endl;
+    int x;
+    std::cin >> x;
+    std::cout << Search::binarySearch(v, x);
     
     return 0;
 }
