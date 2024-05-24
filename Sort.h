@@ -71,6 +71,36 @@ private:
             heapify(vector, n, largest, func);
         }        
     }
+    template<typename T, typename F>
+    static int partition(std::vector<T>&vector, int start, int end, F func) { 
+        T pivot = vector[start];
+        int count = 0;
+        for (int i = start+1; i <= end; i++)
+        {
+            if (vector[i]<=pivot)
+            {
+                count++;
+            }            
+        }
+        int pivotIndex = start + count;
+        swap(vector[pivotIndex], vector[start]);
+        int i = start;
+        int j = end;
+        while (i<pivotIndex && j>pivotIndex) {
+            while (vector[i]<=pivot)
+            {
+                i++;
+            }
+            while (vector[j]>pivot)
+            {
+                j--;
+            }
+            if (i<pivotIndex && j>pivotIndex) {
+                swap(vector[i++], vector[j--]);
+            }
+        }
+        return pivotIndex;
+    }
 public:
     /**
      * 
@@ -136,7 +166,6 @@ public:
             merge(vector, left, middle, right, func);
         }
     }
-    // matriz = [[0 for i in range(9)] for j in range(9)]
     template<typename T, typename F = std::function<bool(const T&, const T&)>>
     static void heapSort(std::vector<T>&vector, F func = [](const T&a, const T&b){ return a>b; }) {
         int n = vector.size();
@@ -150,5 +179,19 @@ public:
             heapify(vector, i, 0, func);
         }
         
+    }
+    template<typename T, typename F = std::function<bool(const T&, const T&)>>
+    static void quickSort(std::vector<T>&vector, int start = -1, int end = -1, F func = [] (const T&a, const T&b) { return a>b; }) {
+        if (start==-1 && end==-1) {
+            start = 0;
+            end = vector.size()-1;
+        }
+        if (end>start)
+        {
+            int p = partition(vector, start, end, func);
+
+            quickSort(vector, start, p-1, func);
+            quickSort(vector, p+1, end, func);
+        }        
     }
 };
