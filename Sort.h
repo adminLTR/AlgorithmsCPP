@@ -3,6 +3,12 @@
 class Sort
 {
 private:
+    template <typename T>
+    static void swap(T&a, T&b) {
+        T aux = a;
+        a = b;
+        b = aux;
+    }
     template <typename T, typename F>
     static void merge(std::vector<T>&vector, int left, int middle, int right, F func) {
         std::vector<T> leftVector = std::vector<T>();
@@ -47,7 +53,23 @@ private:
     }
     template <typename T, typename F = std::function<bool(const T&, const T&)>>
     static void heapify(std::vector<T>&vector, int n, int i, F func) {
-        
+        int largest = i;
+        int left = 2*i+1;
+        int right = 2*i+2;
+        T aux;
+        if (left<n && func(vector[left], vector[largest]))
+        {
+            largest = left;
+        }
+        if (right<n && func(vector[right], vector[largest]))
+        {
+            largest = right;
+        }
+        if (largest!=i)
+        {
+            swap(vector[largest], vector[i]);
+            heapify(vector, n, largest, func);
+        }        
     }
 public:
     /**
@@ -62,9 +84,7 @@ public:
             {
                 if (func(vector[i], vector[j]))
                 {
-                    aux = vector[i];
-                    vector[i] = vector[j];
-                    vector[j] = aux;
+                    swap(vector[i], vector[j]);
                 } 
             }            
         }        
@@ -87,9 +107,7 @@ public:
                     smallest = j;
                 }
             }            
-            aux = vector[smallest];
-            vector[smallest] = vector[i];
-            vector[i] = aux;
+            swap(vector[smallest], vector[i]);
         }        
     }
     template<typename T, typename F = std::function<bool(const T&, const T&)>>
@@ -118,8 +136,19 @@ public:
             merge(vector, left, middle, right, func);
         }
     }
+    // matriz = [[0 for i in range(9)] for j in range(9)]
     template<typename T, typename F = std::function<bool(const T&, const T&)>>
     static void heapSort(std::vector<T>&vector, F func = [](const T&a, const T&b){ return a>b; }) {
-
+        int n = vector.size();
+        for (int i = n/2-1; i >= 0; i--)
+        {
+            heapify(vector, n, i, func);
+        }
+        for (int i = n - 1; i > 0; i--)
+        {
+            swap(vector[i], vector[0]);
+            heapify(vector, i, 0, func);
+        }
+        
     }
 };
