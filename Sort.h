@@ -45,6 +45,10 @@ private:
             k++;
         } 
     }
+    template <typename T, typename F = std::function<bool(const T&, const T&)>>
+    static void heapify(std::vector<T>&vector, int n, int i, F func) {
+        
+    }
 public:
     /**
      * 
@@ -113,5 +117,9 @@ public:
             mergeSort(vector, middle+1, right, func);   
             merge(vector, left, middle, right, func);
         }
+    }
+    template<typename T, typename F = std::function<bool(const T&, const T&)>>
+    static void heapSort(std::vector<T>&vector, F func = [](const T&a, const T&b){ return a>b; }) {
+
     }
 };
